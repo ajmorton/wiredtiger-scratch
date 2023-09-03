@@ -1,0 +1,51 @@
+# This starter workflow is for a CMake project running on a single platform. There is a different starter workflow if you need cross-platform coverage.
+# See: https://github.com/actions/starter-workflows/blob/main/ci/cmake-multi-platform.yml
+name: CMake on a single platform
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+  push:
+    branches:
+      - develop
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Coverage
+
+jobs:
+  
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout PR code
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.pull_request.head.ref }}
+    
+    - name: build wiredtiger
+      run: |
+        cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+        cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+
+    - name: Run tests
+      working-directory: ${{github.workspace}}/build
+      run: | 
+        cd examples
+        ctest -C ${{env.BUILD_TYPE}}
+        cd ../test/csuite
+        ctest -j 8 -R "(2695|3363|3120|3874|2592|4117|2447|2447|9937|4699|4891|4156|4105|2403)"
+
+    - name: Generate code coverage report
+      working-directory: ${{github.workspace}}
+      run: |
+        sudo apt-get -y install gcovr
+        gcovr --gcov-ignore-parse-errors --xml-pretty --exclude-unreachable-branches --print-summary -o coverage.xml --root ${{github.workspace}}
+  
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+          gcov: true
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
