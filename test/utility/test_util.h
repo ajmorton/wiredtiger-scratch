@@ -190,8 +190,12 @@ typedef struct {
  */
 #define testutil_assert(a)                                                   \
     do {                                                                     \
-        if (!(a))                                                            \
+        bool __r;                                                            \
+        __r = !(a);                                                          \
+        /* GCOVR_EXCL_START */                                               \
+        if (__r)                                                             \
             testutil_die(0, "%s/%d: %s", __PRETTY_FUNCTION__, __LINE__, #a); \
+        /* GCOVR_EXCL_STOP */                                                \
     } while (0)
 
 /*
@@ -221,8 +225,11 @@ typedef struct {
 #define testutil_check(call)                                                      \
     do {                                                                          \
         int __r;                                                                  \
-        if ((__r = (call)) != 0)                                                  \
+        __r = (call);                                                             \
+        /* GCOVR_EXCL_START */                                                    \
+        if (__r != 0)                                                             \
             testutil_die(__r, "%s/%d: %s", __PRETTY_FUNCTION__, __LINE__, #call); \
+        /* GCOVR_EXCL_STOP */                                                     \
     } while (0)
 
 /*
