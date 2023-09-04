@@ -189,14 +189,14 @@ typedef struct {
  *     Complain and quit if something isn't true, with no error value.
  */
 #define testutil_assert(a)                                                   \
+    /* GCOVR_EXCL_BR_START */                                                \
     do {                                                                     \
         bool __r;                                                            \
         __r = !(a);                                                          \
-        /* GCOVR_EXCL_START */                                               \
         if (__r)                                                             \
             testutil_die(0, "%s/%d: %s", __PRETTY_FUNCTION__, __LINE__, #a); \
-        /* GCOVR_EXCL_STOP */                                                \
-    } while (0)
+    } while (0)                                                              \
+    /* GCOVR_EXCL_BR_STOP */                                                
 
 /*
  * testutil_assert_errno --
@@ -223,14 +223,14 @@ typedef struct {
  *     Complain and quit if a function call fails.
  */
 #define testutil_check(call)                                                      \
+    /* GCOVR_EXCL_BR_START */                                                     \
     do {                                                                          \
         int __r;                                                                  \
         __r = (call);                                                             \
-        /* GCOVR_EXCL_START */                                                    \
         if (__r != 0)                                                             \
             testutil_die(__r, "%s/%d: %s", __PRETTY_FUNCTION__, __LINE__, #call); \
-        /* GCOVR_EXCL_STOP */                                                     \
-    } while (0)
+    } while (0)                                                                   \
+    /* GCOVR_EXCL_BR_STOP */                                                     
 
 /*
  * testutil_check_error_ok --
