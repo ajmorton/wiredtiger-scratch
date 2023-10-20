@@ -6,23 +6,16 @@ on:
       - develop
 
 jobs:
-  welcome:
+  comment:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v6
         with:
           script: |
-
-            const pr_creator = context.payload.sender.login
-
-            # const is_wt_org_member = octokit.rest.orgs.checkMembershipForUser({
-            #   "wiredtiger",
-            #   pr_creator,
-            # });
-  
-            await github.rest.issues.createComment({
+            github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `PR created by: ${pr_creator}`
+              body: 'Hello!'
             })
+
