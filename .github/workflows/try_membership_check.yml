@@ -7,7 +7,7 @@ on:
 
 jobs:
   welcome:
-    runs-on: self-hosted
+    runs-on: skunkweek-trial
     steps:
       - uses: actions/github-script@v6
         with:
