@@ -15,14 +15,14 @@ jobs:
 
             const pr_creator = context.payload.sender.login
 
-            const is_wt_org_member = octokit.rest.orgs.checkMembershipForUser({
-              "wiredtiger",
-              pr_creator,
-            });
+            # const is_wt_org_member = octokit.rest.orgs.checkMembershipForUser({
+            #   "wiredtiger",
+            #   pr_creator,
+            # });
   
             await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `PR created by: ${pr_creator}, is in wt org? ${is_wt_org_member}`
+              body: `PR created by: ${pr_creator}`
             })
