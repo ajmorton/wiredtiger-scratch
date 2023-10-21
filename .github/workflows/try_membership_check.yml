@@ -17,7 +17,9 @@ jobs:
 
             const pr_creator = context.payload.sender.login
 
-            const wt_members = await github.rest.orgs.listMembers({"wiredtiger",})
+            const wt_members = await github.rest.orgs.listMembers({
+              org: "wiredtiger"
+            })
 
             # const is_wt_member = await github.rest.orgs.checkMembershipForUser({
             #   "wiredtiger",
