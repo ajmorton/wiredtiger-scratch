@@ -14,17 +14,34 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-
             const pr_creator = context.payload.sender.login
-
             const wt_members = await github.rest.orgs.listMembers({ org: "wiredtiger"})
               .then((results) => results.data.map((user) => user.login));
 
-            console.log(context)
+            # github.rest.issues.createComment({
+            #   issue_number: context.issue.number,
+            #   owner: context.repo.owner,
+            #   repo: context.repo.repo,
+            #   body: 'Hello ' + pr_creator + '!' + " members? "
+            # })
 
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: 'Hello ' + pr_creator + '!' + " members? "
-            })
+  pr-title-check:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: actions/github-script@v6
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            pr_title_regex = /^(WT-[0-9]+ .*)$/
+            pr_title = context.payload.pull_request.title
+            
+            if (pr_title_regex.test(pr_title)) {
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: 'Please fix your title to begin with a WT ticket followed by a space: e.g. "WT-1000 Example text"'
+              })
+            }
