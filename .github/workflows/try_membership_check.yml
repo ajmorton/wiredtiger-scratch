@@ -17,7 +17,8 @@ jobs:
 
             const pr_creator = context.payload.sender.login
 
-            const wt_members = await github.rest.orgs.listMembers({ org: "wiredtiger"});
+            const wt_members = await github.rest.orgs.listMembers({ org: "wiredtiger"})
+              .then((results) => results.data.map((user) => user.login));
 
             console.log("print?")
             console.log(wt_members.data)
@@ -26,5 +27,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'Hello ' + pr_creator + '!' + " members? " + wt_members.data.map((user) => user.login)
+              body: 'Hello ' + pr_creator + '!' + " members? " + wt_members
             })
