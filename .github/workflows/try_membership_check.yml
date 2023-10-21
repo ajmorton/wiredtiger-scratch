@@ -17,7 +17,7 @@ jobs:
 
             const pr_creator = context.payload.sender.login
 
-            const is_wt_member = octokit.rest.orgs.checkMembershipForUser({
+            const is_wt_member = github.rest.orgs.checkMembershipForUser({
               "wiredtiger",
               pr_creator
             })
