@@ -17,12 +17,7 @@ jobs:
 
             const pr_creator = context.payload.sender.login
 
-            wt_members = "fixme"
-            github.rest.orgs.listMembers({
-              org: "wiredtiger"
-            })
-
-            const wt_members2 = await github.rest.orgs.listMembers({ org: "actions" });
+            const wt_members2 = await github.rest.orgs.checkMembershipForUser({ org: "wiredtiger", username: pr_creator });
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,
