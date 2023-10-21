@@ -22,7 +22,7 @@ jobs:
               org: "wiredtiger"
             })
 
-
+            const users = await octokit.rest.orgs.listMembers({ org: "actions" });
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,
