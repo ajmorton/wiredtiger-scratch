@@ -20,12 +20,35 @@ jobs:
             const wt_members = await github.rest.orgs.listMembers({ org: "wiredtiger"})
               .then((results) => results.data.map((user) => user.login));
 
-            console.log("print?")
-            console.log(wt_members.data)
+            console.log(github.payload.pull_request)
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: 'Hello ' + pr_creator + '!' + " members? " + wt_members
+            })
+
+  validate-pr-title:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: actions/github-script@v6
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+
+            const pr_creator = context.payload.sender.login
+
+            const wt_members = await github.rest.orgs.listMembers({ org: "wiredtiger"})
+              .then((results) => results.data.map((user) => user.login));
+
+            
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Hello ' + pr_creator + '!' + " members? fixme"
             })
