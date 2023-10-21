@@ -19,6 +19,9 @@ jobs:
 
             const wt_members = await github.rest.orgs.listMembers({ org: "wiredtiger"});
 
+            console.log("print?")
+            console.log(wt_members)
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
