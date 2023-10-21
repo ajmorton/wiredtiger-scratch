@@ -19,8 +19,8 @@ jobs:
 
             const is_wt_member = octokit.rest.orgs.checkMembershipForUser({
               "wiredtiger",
-              pr_creator,
-            });
+              pr_creator
+            })
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,
