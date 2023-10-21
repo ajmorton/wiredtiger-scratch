@@ -20,7 +20,7 @@ jobs:
             const wt_members = await github.rest.orgs.listMembers({ org: "wiredtiger"})
               .then((results) => results.data.map((user) => user.login));
 
-            console.log(github.payload.pull_request)
+            console.log(context.payload.pull_request)
 
             # github.rest.issues.createComment({
             #   issue_number: context.issue.number,
