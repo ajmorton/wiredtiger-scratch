@@ -34,10 +34,19 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            pr_title_regex = /^(WT-[0-9]+ .*)$/
             pr_title = context.payload.pull_request.title
+
+            # regex not supported. We're going hacky
+            is_valid = false
+            first_word = pr_title.split(' ')[0]
+            if (first_word).startsWith("WT-")) {
+              ticket_num = first_word.split('-')[1]
+              if(Number.isInteger(ticket_num)) {
+                is_valid = true
+              }
+            }
             
-            if (pr_title_regex.test(pr_title)) {
+            if (is_valid) {
               github.rest.issues.createComment({
                 issue_number: context.issue.number,
                 owner: context.repo.owner,
